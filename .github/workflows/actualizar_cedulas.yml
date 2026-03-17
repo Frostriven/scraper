@@ -2,8 +2,8 @@ name: Actualizar base de cédulas médicas
 
 on:
   schedule:
-    - cron: '0 4 1 * *' # Día 1 de cada mes a las 4 am UTC
-  workflow_dispatch: # Permite correrlo manualmente
+    - cron: '0 4 1 * *'
+  workflow_dispatch:
 
 jobs:
   actualizar:
@@ -19,13 +19,34 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Instalar dependencias
+      - name: Instalar dependencias Python
         run: pip install -r requirements.txt
 
-      - name: Instalar Playwright y navegadores
+      - name: Instalar Playwright
         run: |
           pip install playwright==1.44.0
-          playwright install chromium --with-deps
+          python -m playwright install chromium
+          sudo apt-get install -y \
+            libglib2.0-0 \
+            libnss3 \
+            libnspr4 \
+            libatk1.0-0 \
+            libatk-bridge2.0-0 \
+            libcups2 \
+            libdrm2 \
+            libdbus-1-3 \
+            libxcb1 \
+            libxkbcommon0 \
+            libx11-6 \
+            libxcomposite1 \
+            libxdamage1 \
+            libxext6 \
+            libxfixes3 \
+            libxrandr2 \
+            libgbm1 \
+            libpango-1.0-0 \
+            libcairo2 \
+            libasound2t64
 
       - name: Correr scrapers
         env:
