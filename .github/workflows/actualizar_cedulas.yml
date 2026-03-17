@@ -24,9 +24,8 @@ jobs:
 
       - name: Instalar Playwright y navegadores
         run: |
-          pip install playwright
-          playwright install chromium
-          playwright install-deps chromium
+          pip install playwright==1.44.0
+          playwright install chromium --with-deps
 
       - name: Correr scrapers
         env:
