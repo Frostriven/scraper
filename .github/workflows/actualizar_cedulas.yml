@@ -1,0 +1,33 @@
+name: Actualizar base de cédulas médicas
+
+on:
+  schedule:
+    - cron: '0 4 1 * *' # Día 1 de cada mes a las 4 am UTC
+  workflow_dispatch: # Permite correrlo manualmente
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Correr scrapers
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: python main.py
+
+      - name: Notificar resultado
+        if: always()
+        run: echo "Scraping completado con status ${{ job.status }}"
