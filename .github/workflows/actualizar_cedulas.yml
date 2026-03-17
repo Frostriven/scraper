@@ -22,6 +22,12 @@ jobs:
       - name: Instalar dependencias
         run: pip install -r requirements.txt
 
+      - name: Instalar Playwright y navegadores
+        run: |
+          pip install playwright
+          playwright install chromium
+          playwright install-deps chromium
+
       - name: Correr scrapers
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
