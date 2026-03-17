@@ -57,7 +57,7 @@ class SepFederalScraper(BaseScraper):
 
         for attempt in range(MAX_RETRIES):
             try:
-                await page.goto(URL, wait_until="networkidle", timeout=30_000)
+                await page.goto(URL, wait_until="domcontentloaded", timeout=90000)
                 break
             except Exception as exc:
                 if attempt == MAX_RETRIES - 1:
@@ -88,7 +88,7 @@ class SepFederalScraper(BaseScraper):
                 .first
             )
             await submit_btn.click()
-            await page.wait_for_load_state("networkidle", timeout=30_000)
+            await page.wait_for_load_state("domcontentloaded", timeout=90000)
         except Exception as exc:
             log(f"  [SEP] error llenando formulario para '{termino}': {exc}", level="error")
             return results
@@ -110,7 +110,7 @@ class SepFederalScraper(BaseScraper):
 
             try:
                 await next_link.click()
-                await page.wait_for_load_state("networkidle", timeout=30_000)
+                await page.wait_for_load_state("domcontentloaded", timeout=90000)
                 await asyncio.sleep(1)
             except Exception:
                 break
